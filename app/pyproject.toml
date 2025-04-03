@@ -1,0 +1,25 @@
+[project]
+name = "poetry"
+version = "0.1.0"
+description = ""
+authors = [
+    {name = "OlegO",email = "olegoleksuk23@gmail.com"}
+]
+
+requires-python = ">=3.13"
+dependencies = [
+    "fastapi (>=0.115.12,<0.116.0)",
+    "sqlalchemy (>=2.0.40,<3.0.0)",
+    "uvicorn (>=0.34.0,<0.35.0)",
+    "psycopg2 (>=2.9.10,<3.0.0)",
+    "alembic (>=1.15.2,<2.0.0)",
+    "dotenv (>=0.9.9,<0.10.0)",
+]
+
+[tool.poetry]
+packages = [{include = "poetry"}]
+package-mode = false
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
