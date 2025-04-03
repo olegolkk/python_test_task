@@ -16,3 +16,13 @@ def get_device_stats_service(
     return DeviceStatsService(
         device_stats_repository=device_stats_repository,
     )
+
+# Для Celery
+def get_celery_device_stats_service() -> DeviceStatsService:
+    db = get_db_session()
+    try:
+        repo = DeviceStatsRepository(db)
+        return DeviceStatsService(repo)
+    except Exception:
+        db.close()
+        raise
