@@ -6,10 +6,26 @@ from dependecy import get_device_stats_service
 from fastapi import APIRouter, status, Depends
 from schemas import DeviceStatsCreateSchema, UserCreateSchema
 from service import DeviceStatsService
-
+from celery_worker import create_task
+from celery.result import AsyncResult
 
 device_router = APIRouter(prefix="/api/devices", tags=["stats"])
 user_router = APIRouter(prefix="/api/users", tags=["users"])
+
+@device_router.post("/test")
+def run_task(a, b, c):
+    task = create_task.delay(a, b, c)
+    return {"task": task.id}
+
+@device_router.get("/tasks/{task_id}")
+async def get_task_result(task_id: str):
+    task = AsyncResult(task_id)
+    return {
+        "task_id": task.id,
+        "status": task.status,
+        "result": task.result if task.ready() else None,
+        "error": str(task.traceback) if task.failed() else None
+    }
 
 @device_router.post("/stats/{device_id}")
 async def add_stats(
