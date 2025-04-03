@@ -13,7 +13,7 @@ device_router = APIRouter(prefix="/api/devices", tags=["stats"])
 user_router = APIRouter(prefix="/api/users", tags=["users"])
 task_router = APIRouter(prefix="/api/tasks", tags=["tasks"])
 
-@task_router.get("/tasks/{task_id}")
+@task_router.get("/{task_id}")
 async def get_task_result(task_id: str):
     task = AsyncResult(task_id)
     return {
@@ -23,7 +23,7 @@ async def get_task_result(task_id: str):
         "error": str(task.traceback) if task.failed() else None
     }
 
-@device_router.post("/stats/{device_id}")
+@device_router.post("/stats/{device_id}", status_code=status.HTTP_201_CREATED)
 async def add_stats(
         device_stats_service: Annotated[DeviceStatsService, Depends(get_device_stats_service)],
         device_stats: DeviceStatsCreateSchema):
@@ -65,7 +65,7 @@ async def create_user(
 ):
     return device_stats_service.create_user(user)
 
-@user_router.get("{user_id}")
+@user_router.get("/{user_id}")
 async def get_user(
         device_stats_service: Annotated[DeviceStatsService, Depends(get_device_stats_service)],
         user_id: UUID
