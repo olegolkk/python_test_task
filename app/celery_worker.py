@@ -23,7 +23,7 @@ def get_device_stats_by_device_id(device_id: int,
     result = service.get_device_stats_by_device_id(device_id, start_time, end_time)
 
     # Имитация задержки
-    time.sleep(10)
+    #time.sleep(10)
     return result
 
 
@@ -36,7 +36,7 @@ def get_device_stats_all_by_user_id(user_id: UUID,
     result = service.get_device_stats_all_by_user_id(user_id, start_time, end_time)
 
     # Имитация задержки
-    time.sleep(10)
+    #time.sleep(10)
     return result
 
 @celery.task(name="get_current_device_stats_by_user_id")
@@ -48,6 +48,6 @@ def get_current_device_stats_by_user_id(user_id: UUID,
     result = service.get_current_device_stats_by_user_id(user_id, device_id, start_time, end_time)
 
     # Имитация задержки
-    time.sleep(10)
+    #time.sleep(10)
     return result
 

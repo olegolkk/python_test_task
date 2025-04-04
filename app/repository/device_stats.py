@@ -5,7 +5,7 @@ from uuid import UUID
 
 from database import DeviceStats, User
 from schemas import DeviceStatsCreateSchema, DeviceStatsResponseSchema, UserResponseSchema, UserCreateSchema
-
+from fastapi import HTTPException, status
 
 class DeviceStatsRepository:
 
@@ -29,7 +29,10 @@ class DeviceStatsRepository:
             ).scalar()
 
             if not device_exists:
-                return {"error": f"Устройства с таким {device_id} не найдено"}, 404
+                raise HTTPException(
+                    status_code=status.HTTP_404_NOT_FOUND,
+                    detail=f"Устройства с таким id = {device_id} не найдено",
+                )
 
             query = session.query(DeviceStats).filter(
                 DeviceStats.device_id == device_id
@@ -138,7 +141,10 @@ class DeviceStatsRepository:
             ).scalar()
 
             if not device_exists:
-                return {"error": f"Устройства с таким {device_id} не найдено"}, 404
+                raise HTTPException(
+                    status_code=status.HTTP_404_NOT_FOUND,
+                    detail=f"Устройства с таким id = {device_id} не найдено",
+                )
 
             query = session.query(DeviceStats).filter(
                 DeviceStats.user_id == user_id,
