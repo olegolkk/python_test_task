@@ -13,7 +13,7 @@ device_router = APIRouter(prefix="/api/devices", tags=["stats"])
 user_router = APIRouter(prefix="/api/users", tags=["users"])
 task_router = APIRouter(prefix="/api/tasks", tags=["tasks"])
 
-@task_router.get("/{task_id}")
+@task_router.get("/{task_id}", status_code=status.HTTP_200_OK)
 async def get_task_result(task_id: str):
     task = AsyncResult(task_id)
     return {
@@ -29,7 +29,7 @@ async def add_stats(
         device_stats: DeviceStatsCreateSchema):
     return device_stats_service.create_device_stats(device_stats)
 
-@device_router.get("/stats/{device_id}")
+@device_router.get("/stats/{device_id}", status_code=status.HTTP_200_OK)
 async def get_stats_by_device_id(
         device_id: int,
         start_time: Optional[datetime] = None,
@@ -38,7 +38,7 @@ async def get_stats_by_device_id(
     task = get_device_stats_by_device_id.delay(device_id, start_time, end_time)
     return task.id
 
-@device_router.get("/stats/{user_id}/all")
+@device_router.get("/stats/{user_id}/all",  status_code=status.HTTP_200_OK)
 async def get_stats_all_by_user_id(
         user_id: UUID,
         start_time: Optional[datetime] = None,
@@ -47,7 +47,7 @@ async def get_stats_all_by_user_id(
     task = get_device_stats_all_by_user_id.delay(user_id, start_time, end_time)
     return task.id
 
-@device_router.get("/stats/{user_id}/{device_id}")
+@device_router.get("/stats/{user_id}/{device_id}", status_code=status.HTTP_200_OK)
 async def get_curr_device_stats_by_user_id(
         user_id: UUID,
         device_id: int,
@@ -58,14 +58,14 @@ async def get_curr_device_stats_by_user_id(
     task = get_current_device_stats_by_user_id.delay(user_id, device_id, start_time, end_time)
     return task.id
 
-@user_router.post("")
+@user_router.post("",  status_code=status.HTTP_201_CREATED)
 async def create_user(
         device_stats_service: Annotated[DeviceStatsService, Depends(get_device_stats_service)],
         user: UserCreateSchema
 ):
     return device_stats_service.create_user(user)
 
-@user_router.get("/{user_id}")
+@user_router.get("/{user_id}",  status_code=status.HTTP_200_OK)
 async def get_user(
         device_stats_service: Annotated[DeviceStatsService, Depends(get_device_stats_service)],
         user_id: UUID
