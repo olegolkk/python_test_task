@@ -78,6 +78,11 @@ class DeviceStatsRepository:
             user: UserResponseSchema = session.execute(select(User).where(User.id == user_id)).scalar_one_or_none()
             return user
 
+    def get_user_by_email(self, email: str) -> UserResponseSchema:
+        with self.db_session() as session:
+            user: UserResponseSchema = session.execute(select(User).where(User.email == email)).scalar_one_or_none()
+            return user
+
     # Получить статистику для пользователя обо всех устройствах
     def get_device_stats_all_by_user_id(self, user_id: UUID, start_time: datetime, end_time: datetime):
         with self.db_session() as session:

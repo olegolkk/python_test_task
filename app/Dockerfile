@@ -12,7 +12,7 @@ RUN poetry install --no-interaction --no-ansi
 
 COPY . .
 
-RUN chmod +x docker-entrypoint.sh
+RUN chmod +x ./docker-entrypoint.sh
 
 ENTRYPOINT ["./docker-entrypoint.sh"]
 

@@ -28,6 +28,11 @@ class DeviceStatsService:
 
     # Создать пользователя
     def create_user(self, user: UserCreateSchema) -> UserResponseSchema:
+        if self.device_stats_repository.get_user_by_email(user.email):
+            raise HTTPException(
+                status_code=status.HTTP_409_CONFLICT,
+                detail=f"Пользователь с таким email уже зарегистрирован",
+            )
         user_id: UUID = self.device_stats_repository.create_user(user)
         return self.device_stats_repository.get_user_by_id(user_id)
 
